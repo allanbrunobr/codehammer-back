@@ -1,0 +1,38 @@
+version: "3.8"
+
+# Create a custom network for isolation
+networks:
+  codehammer_network:
+    driver: bridge
+    name: codehammer_network
+
+services:
+  postgres:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: postgresql-codehammer
+    ports:
+      # Use a different port to avoid conflicts with existing PostgreSQL instances
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: codehammer
+    volumes:
+      - postgresql_codehammer_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    # Connect to the isolated network
+    networks:
+      - codehammer_network
+
+volumes:
+  # Use a unique name for the volume to avoid conflicts
+  postgresql_codehammer_data:
+    name: postgresql_codehammer_data
+    driver: local
