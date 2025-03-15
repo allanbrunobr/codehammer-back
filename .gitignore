@@ -49,3 +49,21 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Credentials and secrets
+credentials/
+**/credentials/
+**/keys/
+*.json
+*_credentials.json
+*-credentials.json
+application_default_credentials.json
+google-credentials.json
+firebase-service-account.json
+
+# Arquivos específicos com tokens
+update_integration_tokens.py
+database_schema.sql
+database_setup.sql
+update_all_tables.sql
+update_integrations.sql
